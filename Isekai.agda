@@ -132,6 +132,41 @@ module ℕ-order where
 
 
 
+data _+_ {𝓤 𝓥} (X : 𝓤 ̇) (Y : 𝓥 ̇) : 𝓤 ⊔ 𝓥 ̇ where
+  inl : X → X + Y
+  inr : Y → X + Y
+
++-induction : {X : 𝓤 ̇} {Y : 𝓥 ̇} (A : X + Y → 𝓦 ̇)
+            → ((x : X) → A (inl x))
+            → ((y : Y) → A (inr y))
+            -----------------------
+            → (z : X + Y) → A z
++-induction A f g (inl x) = f x
++-induction A f g (inr y) = g y
+
++-recursion : {X : 𝓤 ̇} {Y : 𝓥 ̇} {A : 𝓦 ̇}
+            → (X → A)
+            → (Y → A)
+            → X + Y → A
++-recursion {𝓤} {𝓥} {𝓦} {X} {Y} {A} = +-induction (λ _ → A)
+
+
+𝟚 : 𝓤₀ ̇
+𝟚 = 𝟙 + 𝟙
+
+pattern ₀ = inl ⋆
+pattern ₁ = inr ⋆
+
+𝟚-induction : (A : 𝟚 → 𝓤 ̇)
+            → A ₀
+            → A ₁
+            ----------------
+            → (n : 𝟚) → A n
+𝟚-induction A a₀ a₁ ₀ = a₀
+𝟚-induction A a₀ a₁ ₁ = a₁
+
+
+
 
 
 
